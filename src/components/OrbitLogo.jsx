@@ -1,9 +1,8 @@
 import React from 'react';
 
 /**
- * Orbit Logo: Blue & Black Abstract Black Hole
- * Matches the Saturn/Black Hole silhouette with electric neon blue glowing orbital rings,
- * deep black core, and white orbiting particle.
+ * Orbit Logo: Razor-sharp Blue & Black Planet with Glowing Accretion Ring
+ * Built with exact geometric arcs so there are zero disjointed caps, distortions, or blurry dilations.
  */
 export default function OrbitLogo({ size = 32, className = '' }) {
   const idPrefix = React.useId().replace(/:/g, '');
@@ -14,102 +13,94 @@ export default function OrbitLogo({ size = 32, className = '' }) {
       style={{ width: size, height: size }}
     >
       <svg
-        viewBox="0 0 100 100"
+        viewBox="0 0 256 256"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full drop-shadow-md"
+        className="w-full h-full"
       >
         <defs>
-          {/* Electric Blue Neon Gradient */}
-          <linearGradient id={`${idPrefix}-blue-ring`} x1="15%" y1="20%" x2="85%" y2="80%">
-            <stop offset="0%" stopColor="#38bdf8" />   {/* Sky / Cyan highlight */}
-            <stop offset="35%" stopColor="#00d2ff" />  {/* Vivid electric cyan */}
-            <stop offset="70%" stopColor="#2563eb" />  {/* Vibrant blue */}
-            <stop offset="100%" stopColor="#1d4ed8" /> {/* Deep royal blue */}
-          </linearGradient>
-
-          {/* Secondary highlight gradient for the front swoop */}
-          <linearGradient id={`${idPrefix}-front-glow`} x1="0%" y1="50%" x2="100%" y2="50%">
-            <stop offset="0%" stopColor="#00f0ff" />
-            <stop offset="60%" stopColor="#3b82f6" />
+          {/* Crisp Electric Neon Blue Gradient */}
+          <linearGradient id={`${idPrefix}-blue`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#38bdf8" />
+            <stop offset="35%" stopColor="#00d2ff" />
+            <stop offset="70%" stopColor="#2563eb" />
             <stop offset="100%" stopColor="#1d4ed8" />
           </linearGradient>
 
-          {/* Soft ambient cosmic background haze */}
-          <radialGradient id={`${idPrefix}-bg-aura`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#0284c7" stopOpacity="0.32" />
-            <stop offset="65%" stopColor="#0369a1" stopOpacity="0.12" />
-            <stop offset="100%" stopColor="#0f172a" stopOpacity="0" />
-          </radialGradient>
-
-          {/* Neon Bloom Glow Filter */}
+          {/* Clean, tight neon glow (non-dilated) */}
           <filter id={`${idPrefix}-glow`} x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="2.2" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            <feGaussianBlur stdDeviation="3.5" result="glow" />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
+
+          {/* Soft cosmic background aura */}
+          <radialGradient id={`${idPrefix}-aura`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#0284c7" stopOpacity="0.28" />
+            <stop offset="70%" stopColor="#0369a1" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="#020617" stopOpacity="0" />
+          </radialGradient>
         </defs>
 
-        {/* 1. Soft Circular Background Aura (Behind everything) */}
-        <circle
-          cx="50"
-          cy="49"
-          r="38"
-          fill={`url(#${idPrefix}-bg-aura)`}
-        />
+        {/* Ambient Halo */}
+        <circle cx="128" cy="128" r="95" fill={`url(#${idPrefix}-aura)`} />
 
-        {/* 2. Back Upper Arc of the Outer Ring (Passes behind the sphere) */}
-        <path
-          d="M 22 55 C 20 30, 68 18, 84 37"
-          stroke={`url(#${idPrefix}-blue-ring)`}
-          strokeWidth="6.5"
-          strokeLinecap="round"
-          filter={`url(#${idPrefix}-glow)`}
-        />
+        {/* Tilted Planetary Ring System (-26deg) */}
+        <g transform="rotate(-26 128 128)">
+          {/* 1. Back Arc of the Outer Ring (behind sphere) */}
+          <path
+            d="M 32 128 A 96 35 0 0 1 224 128"
+            fill="none"
+            stroke={`url(#${idPrefix}-blue)`}
+            strokeWidth="12"
+            strokeLinecap="round"
+            filter={`url(#${idPrefix}-glow)`}
+          />
 
-        {/* 3. Deep Black Hole Singularity Core Sphere */}
-        <circle
-          cx="50"
-          cy="48"
-          r="23"
-          fill="#000000"
-          stroke="#0f172a"
-          strokeWidth="1.2"
-        />
+          {/* 2. Inner Satellite Orbit Track */}
+          <path
+            d="M 152 108 A 78 28 0 0 1 206 128"
+            fill="none"
+            stroke={`url(#${idPrefix}-blue)`}
+            strokeWidth="5"
+            strokeLinecap="round"
+            opacity="0.85"
+          />
 
-        {/* 4. Inner Ring Track with White Particle */}
-        <path
-          d="M 64 33 C 74 36, 80 43, 76 49 C 71 55, 54 58, 44 57"
-          stroke={`url(#${idPrefix}-blue-ring)`}
-          strokeWidth="3.2"
-          strokeLinecap="round"
-          opacity="0.85"
-        />
+          {/* 3. Orbiting White Satellite Moon */}
+          <circle cx="184" cy="114" r="7" fill="#ffffff" />
+          <circle
+            cx="184"
+            cy="114"
+            r="9"
+            fill="none"
+            stroke="#38bdf8"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
 
-        {/* White Orbiting Satellite / Photon Particle */}
-        <circle
-          cx="74"
-          cy="38"
-          r="3"
-          fill="#ffffff"
-          className="drop-shadow-[0_0_4px_rgba(255,255,255,0.9)]"
-        />
+          {/* 4. Pure Black Planet Sphere Core */}
+          <circle
+            cx="128"
+            cy="128"
+            r="54"
+            fill="#000000"
+            stroke="#1e293b"
+            strokeWidth="1.5"
+          />
 
-        {/* 5. Front Lower Arc of the Outer Ring (Sweeps boldly in front of the sphere) */}
-        <path
-          d="M 20 58 C 22 71, 48 76, 75 58 C 84 52, 88 44, 85 37"
-          stroke={`url(#${idPrefix}-front-glow)`}
-          strokeWidth="7"
-          strokeLinecap="round"
-          filter={`url(#${idPrefix}-glow)`}
-        />
-
-        {/* Upper Left Front Tip (Connecting curvature) */}
-        <path
-          d="M 21 54 C 20 56, 20.5 57.5, 22 59"
-          stroke={`url(#${idPrefix}-front-glow)`}
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
+          {/* 5. Front Arc of the Outer Ring (smoothly sweeps in front of sphere) */}
+          <path
+            d="M 224 128 A 96 35 0 0 1 32 128"
+            fill="none"
+            stroke={`url(#${idPrefix}-blue)`}
+            strokeWidth="12"
+            strokeLinecap="round"
+            filter={`url(#${idPrefix}-glow)`}
+          />
+        </g>
       </svg>
     </div>
   );

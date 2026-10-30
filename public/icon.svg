@@ -1,61 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
   <defs>
-    <!-- Electric Blue Neon Gradient -->
-    <linearGradient id="blue-ring" x1="15%" y1="20%" x2="85%" y2="80%">
+    <!-- Crisp Electric Blue Neon Gradient -->
+    <linearGradient id="neon-blue" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#38bdf8"/>
       <stop offset="35%" stop-color="#00d2ff"/>
       <stop offset="70%" stop-color="#2563eb"/>
       <stop offset="100%" stop-color="#1d4ed8"/>
     </linearGradient>
 
-    <!-- Secondary highlight gradient for the front swoop -->
-    <linearGradient id="front-glow" x1="0%" y1="50%" x2="100%" y2="50%">
-      <stop offset="0%" stop-color="#00f0ff"/>
-      <stop offset="60%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#1d4ed8"/>
-    </linearGradient>
-
-    <!-- Soft ambient cosmic background haze -->
-    <radialGradient id="bg-aura" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.35"/>
-      <stop offset="65%" stop-color="#0369a1" stop-opacity="0.12"/>
-      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
-    </radialGradient>
-
-    <!-- Squircle container background -->
-    <radialGradient id="bg-container" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#111827"/>
-      <stop offset="100%" stop-color="#030712"/>
-    </radialGradient>
-
-    <!-- Neon Glow Filter -->
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="10" result="blur"/>
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    <!-- Subtle Soft Glow (Clean & Crisp, not dilated) -->
+    <filter id="crisp-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.5" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
     </filter>
+
+    <!-- Dark Icon Container Background -->
+    <radialGradient id="icon-bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </radialGradient>
+
+    <!-- Ambient Cosmic Halo -->
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"/>
+      <stop offset="70%" stop-color="#0369a1" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
   </defs>
 
-  <!-- Dark Rounded App Icon Base -->
-  <rect width="512" height="512" rx="128" fill="url(#bg-container)"/>
+  <!-- Squircle Base for App Icon -->
+  <rect width="256" height="256" rx="64" fill="url(#icon-bg)"/>
 
-  <!-- Background Aura -->
-  <circle cx="256" cy="250" r="195" fill="url(#bg-aura)"/>
+  <!-- Subtle Ambient Halo -->
+  <circle cx="128" cy="128" r="95" fill="url(#halo)"/>
 
-  <!-- Back Upper Arc of Outer Ring -->
-  <path d="M 112 280 C 102 153, 348 92, 430 190" stroke="url(#blue-ring)" stroke-width="34" stroke-linecap="round" filter="url(#glow)"/>
+  <!-- Tilted Orbit System (-26 degrees) -->
+  <g transform="rotate(-26 128 128)">
+    <!-- 1. Back Arc of Outer Ring (Passes behind the sphere) -->
+    <path
+      d="M 32 128 A 96 35 0 0 1 224 128"
+      fill="none"
+      stroke="url(#neon-blue)"
+      stroke-width="12"
+      stroke-linecap="round"
+      filter="url(#crisp-glow)"
+    />
 
-  <!-- Deep Black Core Sphere -->
-  <circle cx="256" cy="245" r="118" fill="#000000" stroke="#0f172a" stroke-width="6"/>
+    <!-- 2. Inner Track (Where satellite orbits) -->
+    <path
+      d="M 152 108 A 78 28 0 0 1 206 128"
+      fill="none"
+      stroke="url(#neon-blue)"
+      stroke-width="5"
+      stroke-linecap="round"
+      opacity="0.85"
+    />
 
-  <!-- Inner Ring Track -->
-  <path d="M 328 169 C 379 184, 410 220, 390 251 C 364 282, 277 297, 225 292" stroke="url(#blue-ring)" stroke-width="16" stroke-linecap="round" opacity="0.85"/>
+    <!-- 3. Orbiting White Satellite Sphere -->
+    <circle
+      cx="184"
+      cy="114"
+      r="7"
+      fill="#ffffff"
+    />
+    <circle
+      cx="184"
+      cy="114"
+      r="9"
+      fill="none"
+      stroke="#38bdf8"
+      stroke-width="1.5"
+      opacity="0.6"
+    />
 
-  <!-- White Orbiting Particle -->
-  <circle cx="379" cy="195" r="15" fill="#ffffff"/>
+    <!-- 4. Pure Black Planet / Singularity Core -->
+    <circle
+      cx="128"
+      cy="128"
+      r="54"
+      fill="#000000"
+      stroke="#1e293b"
+      stroke-width="1.5"
+    />
 
-  <!-- Front Lower Arc of Outer Ring -->
-  <path d="M 102 297 C 113 364, 246 390, 384 297 C 430 266, 451 225, 436 190" stroke="url(#front-glow)" stroke-width="36" stroke-linecap="round" filter="url(#glow)"/>
-
-  <!-- Connecting Tip -->
-  <path d="M 107 276 C 102 286, 105 295, 112 302" stroke="url(#front-glow)" stroke-width="30" stroke-linecap="round"/>
+    <!-- 5. Front Arc of Outer Ring (Passes crisply in front of the sphere) -->
+    <path
+      d="M 224 128 A 96 35 0 0 1 32 128"
+      fill="none"
+      stroke="url(#neon-blue)"
+      stroke-width="12"
+      stroke-linecap="round"
+      filter="url(#crisp-glow)"
+    />
+  </g>
 </svg>

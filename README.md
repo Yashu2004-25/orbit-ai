@@ -1,146 +1,132 @@
-# Orbit
+<p align="center">
+  <img src="docs/hero.svg" alt="Orbit AI Banner" width="100%" />
+</p>
 
-Orbit: a fast, clean AI chat app for Windows and Android, powered by Groq.
+<p align="center">
+  <strong>A fast, clean AI chat app for Windows and Android, powered by Groq.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit-Setup.exe">
+    <img src="https://img.shields.io/badge/Download%20for-Windows%20(.exe)-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows" />
+  </a>
+  <a href="https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit.apk">
+    <img src="https://img.shields.io/badge/Download%20for-Android%20(.apk)-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android" />
+  </a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" alt="Version" />
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Android%20%7C%20Web-lightgrey?style=flat-square" alt="Platforms" />
+  <img src="https://img.shields.io/badge/AI%20Engine-Groq%20LPU-orange?style=flat-square" alt="Groq" />
+  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" />
+</p>
 
 ---
 
-## 📥 Downloads
+## 📥 Direct Downloads
 
-[![Download for Windows (.exe)](https://img.shields.io/badge/Download-Windows%20(.exe)-blue?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/YOUR_GITHUB_USERNAME/orbit-chatbot/releases/latest/download/Orbit-Setup.exe)
-[![Download for Android (.apk)](https://img.shields.io/badge/Download-Android%20(.apk)-emerald?style=for-the-badge&logo=android&logoColor=white)](https://github.com/YOUR_GITHUB_USERNAME/orbit-chatbot/releases/latest/download/Orbit.apk)
+| Platform | File | Direct Link |
+| :--- | :--- | :--- |
+| **Windows Desktop** | `Orbit-Setup.exe` | [**Download Installer (.exe)**](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit-Setup.exe) |
+| **Android Mobile** | `Orbit.apk` | [**Download APK (.apk)**](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit.apk) |
 
-> *All versions: see the [Releases](https://github.com/YOUR_GITHUB_USERNAME/orbit-chatbot/releases) page.*  
-> *(Remember to replace `YOUR_GITHUB_USERNAME` with your actual GitHub username!)*
+> 📌 *All versions, changelogs, and releases: see the [GitHub Releases](https://github.com/Yashu2004-25/orbit-ai/releases) page.*
 
 ---
 
-## 🚀 How to Install
+## 🚀 Installation Guide
 
-### On Windows
-1. Click the **Download for Windows (.exe)** button above to get `Orbit-Setup.exe`.
-2. Double-click the downloaded setup file.
-3. If Windows SmartScreen shows a warning (*"Windows protected your PC"*), click **More info** and then click **Run anyway** (this warning occurs because open-source apps are not digitally code-signed with expensive commercial certificates).
+### Windows Installation
+1. Download **[`Orbit-Setup.exe`](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit-Setup.exe)** from the link above.
+2. Double-click the installer to launch the setup.
+3. *Note on Windows SmartScreen:* Because open-source community applications do not carry thousand-dollar commercial code-signing certificates, Windows SmartScreen may show an alert saying *"Windows protected your PC"*.
+   - Click **More info**
+   - Click **Run anyway**
+4. Orbit installs in seconds and places a desktop shortcut for quick access.
 
-### On Android
-1. Click the **Download for Android (.apk)** button above on your Android phone to download `Orbit.apk`.
-2. Tap the downloaded file to install it.
-3. If prompted by Android, toggle **Allow from this source** under *Install unknown apps*.
+### Android Installation
+1. Download **[`Orbit.apk`](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit.apk)** directly onto your phone.
+2. Tap the downloaded `.apk` in your notifications or File Manager.
+3. If prompted by Android security, toggle **Allow from this source** under *Install unknown apps*.
+4. Tap **Install** and open Orbit.
 
 ---
 
 ## 🔑 First-Time Setup (3 Simple Steps)
 
-1. **Get a free Groq API key**: Visit [console.groq.com/keys](https://console.groq.com/keys) and create a free key in seconds.
-2. **Open Orbit**: On first launch, the Settings window will open automatically.
-3. **Paste your key and start chatting**: Click **Test key** to confirm it works, click **Save**, and ask Orbit anything!
+1. **Get your free Groq API key**:
+   Head to [console.groq.com/keys](https://console.groq.com/keys) and generate your free API key in seconds.
+2. **Open Orbit**:
+   On your first launch, the Settings window will automatically appear with a welcome prompt.
+3. **Save and Start Chatting**:
+   Paste your key (`gsk_...`), click **Test key** to confirm connectivity, click **Save**, and start enjoying instantaneous AI responses!
 
 ---
 
 ## ✨ Features
 
-- **ChatGPT-Style Design**: Clean, calm, modern typography with lots of white space and subtle animations.
-- **Dark & Light Modes**: Seamlessly tracks your system preferences or toggles manually with custom design tokens.
-- **Persistent Chat History**: All conversations are automatically saved in local device storage with auto-naming, renaming, and deletion.
-- **Real-Time Streaming**: Live token streaming with a gentle three-dot "thinking" animation and an instant Stop button.
-- **Rich Markdown & Code Highlighting**: Never shows raw markdown syntax. Formats lists, quotes, tables, and includes dark syntax-highlighted code blocks with a one-click **Copy code** button.
-- **Model Switcher (Only Working Models)**: Dynamically fetches available chat models from Groq while filtering out retired models (such as old Llama 3.1/3.3/4 variants). Safe smart defaults include `GPT-OSS 120B` and `GPT-OSS 20B`.
-- **Auto-Scroll with Manual Override**: Automatically scrolls to bottom while streaming, but stops forcing scroll if you browse upwards, offering a floating "scroll to bottom" button.
+- **ChatGPT-Inspired Aesthetics**: Clean, calm, modern interface with spacious layouts, smooth 180ms transitions, and zero visual clutter.
+- **Dark & Light Mode**: Seamlessly follows your operating system theme by default, with instant manual toggles in Settings.
+- **Live Response Streaming**: Fast token streaming directly from Groq's LPUs with a gentle three-dot "thinking" animation and an instant **Stop** button.
+- **Flawless Markdown & Code Highlighting**: Never reveals raw markdown symbols. Full support for tables, lists, quotes, and dark code blocks with syntax highlighting and a 1-click **Copy code** button.
+- **Smart Model Selector (Only Active Models)**: Dynamically fetches chat models from Groq while filtering out decommissioned/retired models. Comes with safe fallbacks:
+  - `openai/gpt-oss-120b` *(Smartest)*
+  - `openai/gpt-oss-20b` *(Fastest)*
+- **Persistent Chat History**: Stores all your chats locally on your device with auto-titling from your first prompt, inline renaming, and safe deletion.
+- **Smart Scrolling**: Automatically scrolls during streaming, but detects when you scroll up manually and displays a floating "scroll to bottom" button.
 
 ---
 
 ## 🔒 Privacy & Security
 
-- **Your key stays on your device**: API keys are saved exclusively in your device's local storage and are never sent anywhere except directly to Groq's official API endpoint (`api.groq.com`).
-- **Private chats**: All your conversations remain on your device.
-- ⚠️ **Developer Notice**: When building installers or APKs to distribute publicly, **never** include your personal API key in `.env`.
+- **Local Storage Only**: Your API key and conversation history are stored **only on your device** in `localStorage`.
+- **Zero Intermediary Servers**: All requests go straight from your device to the official Groq API (`api.groq.com`).
+- **No Telemetry**: No trackers, no telemetry, and no data mining.
 
 ---
 
 ## 🛠️ For Developers
 
-### Prerequisites
-- Node.js (v18+)
-- npm
-- Android Studio (for Android builds)
+### Tech Stack
+- **Framework**: React 19 + Vite
+- **Styling**: Tailwind CSS v4 + Tailwind Typography
+- **Desktop Runtime**: Electron 34 + electron-builder
+- **Mobile Runtime**: Capacitor 7 (Android)
+- **AI Backend**: Plain `fetch` streaming to Groq API
 
-### 1. Install Dependencies
+### Local Development Setup
+
 ```bash
+# 1. Clone repository
+git clone https://github.com/Yashu2004-25/orbit-ai.git
+cd orbit-ai
+
+# 2. Install dependencies
 npm install
-```
 
-### 2. Local Web Development
-```bash
+# 3. Start local web server
 npm run dev
 ```
 
-### 3. Test Desktop Windows App (Electron)
+### Desktop & Mobile Builds
+
 ```bash
+# Run desktop app locally
 npm run electron
-```
 
-### 4. Build Windows Installer (`Orbit-Setup.exe`)
-```bash
+# Build Windows installer (release/Orbit-Setup.exe)
 npm run dist:win
-```
-The installer will be generated in `release/Orbit-Setup.exe`.
 
-### 5. Build Android APK (Capacitor)
-```bash
-# 1. Build web production bundle
+# Build Android production APK
 npm run build
-
-# 2. Sync changes into Android project
 npx cap sync
-
-# 3. Open in Android Studio
 npx cap open android
-```
-Inside Android Studio:
-- Select **Build > Build Bundle(s) / APK(s) > Build APK(s)**
-- Find the APK at `android/app/build/outputs/apk/debug/app-debug.apk`
-- Rename it to `Orbit.apk`
-
----
-
-## 📁 Project Layout
-
-```
-orbit-chatbot/
-├── android/                   # Native Android Capacitor project
-├── electron/
-│   └── main.js               # Electron desktop window configuration
-├── src/
-│   ├── components/
-│   │   ├── Sidebar.jsx       # Chat history drawer & settings trigger
-│   │   ├── TopBar.jsx        # Navigation, sidebar toggle & model dropdown
-│   │   ├── ModelPicker.jsx   # Dynamic model selector
-│   │   ├── ChatWindow.jsx    # Centered conversation view & scroll manager
-│   │   ├── MessageItem.jsx   # Message bubble, copy & regenerate
-│   │   ├── MarkdownView.jsx  # Rich markdown parser without raw symbols
-│   │   ├── CodeBlock.jsx     # Syntax-highlighted code box with copy button
-│   │   ├── ChatInput.jsx     # Floating auto-expanding input box
-│   │   ├── EmptyState.jsx    # Centered greeting & suggestion chips
-│   │   └── SettingsModal.jsx # API key tester & theme settings
-│   ├── services/
-│   │   └── groq.js           # Groq streaming service (pure fetch)
-│   ├── hooks/
-│   │   └── useChats.js       # Persistent chat storage & conversation state
-│   ├── App.jsx               # Main application container
-│   ├── main.jsx              # React DOM entry point
-│   └── index.css             # Tailwind CSS tokens & theme definitions
-├── public/
-│   ├── icon.png              # App icon
-│   └── icon.svg              # Vector app icon
-├── .env.example              # Environment variables template
-├── .gitignore                # Git exclusions
-├── capacitor.config.json     # Mobile app configuration
-├── vite.config.js            # Vite bundler configuration (base: './')
-├── package.json              # Dependencies & build scripts
-└── README.md                 # Documentation & download badges
+# Inside Android Studio: Build > Build Bundle(s) / APK(s) > Build APK(s)
 ```
 
 ---
 
 ## 📄 License
-MIT License. Free for personal and commercial use.
 
+Distributed under the **MIT License**. Free for personal and commercial use.

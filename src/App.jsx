@@ -11,7 +11,8 @@ import {
   fetchAvailableModels,
   streamChatCompletion,
 } from './services/groq.js';
-import { AlertCircle, CheckCircle2, X } from 'lucide-react';
+import { needsWebSearch, searchDuckDuckGo } from './services/search.js';
+import { AlertCircle, CheckCircle2, X, Globe } from 'lucide-react';
 
 export default function App() {
   const {
@@ -48,10 +49,11 @@ export default function App() {
   // Input & Streaming states
   const [input, setInput] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
   const abortControllerRef = useRef(null);
 
   // Toast notifications
-  const [toast, setToast] = useState(null); // { type: 'info' | 'error' | 'success', message: string }
+  const [toast, setToast] = useState(null);
 
   const showToast = useCallback((message, type = 'info') => {
     setToast({ message, type });
@@ -77,7 +79,6 @@ export default function App() {
 
     applyTheme();
 
-    // Listen for system theme changes if set to 'system'
     const listener = () => {
       if (theme === 'system') applyTheme();
     };
@@ -98,7 +99,6 @@ export default function App() {
       if (fetched && fetched.length > 0) {
         setModels(fetched);
 
-        // If saved model is no longer in the list, switch to default
         setSelectedModel((current) => {
           const exists = fetched.some((m) => m.id === current);
           if (!exists) {
@@ -117,7 +117,6 @@ export default function App() {
   useEffect(() => {
     const key = getActiveApiKey();
     if (!key) {
-      // First launch with no API key: open settings automatically
       setIsSettingsOpen(true);
       showToast('Welcome to Orbit! Please enter your Groq API key to get started.', 'info');
     }
@@ -136,6 +135,7 @@ export default function App() {
       abortControllerRef.current = null;
     }
     setIsStreaming(false);
+    setIsSearching(false);
   };
 
   // Send message
@@ -167,6 +167,21 @@ export default function App() {
     setIsStreaming(true);
     abortControllerRef.current = new AbortController();
 
+    // 3. Check if question needs web search
+    let searchContext = null;
+    if (needsWebSearch(textToSend)) {
+      setIsSearching(true);
+      try {
+        searchContext = await searchDuckDuckGo(textToSend);
+        if (searchContext) {
+          showToast('🔍 Searched the web for up-to-date info.', 'info');
+        }
+      } catch (err) {
+        console.warn('Web search failed, proceeding without it:', err);
+      }
+      setIsSearching(false);
+    }
+
     // Prepare message history
     const existingMessages = activeChat?.messages || [];
     const conversationHistory = [
@@ -180,6 +195,7 @@ export default function App() {
         model: selectedModel,
         messages: conversationHistory,
         signal: abortControllerRef.current.signal,
+        searchContext,
         onChunk: (chunk) => {
           appendMessageContent(chatId, assistantMessageId, chunk);
         },
@@ -218,6 +234,7 @@ export default function App() {
       }
     } finally {
       setIsStreaming(false);
+      setIsSearching(false);
       abortControllerRef.current = null;
     }
   };
@@ -226,12 +243,10 @@ export default function App() {
   const handleRegenerate = () => {
     if (isStreaming || !activeChat || activeChat.messages.length < 2) return;
 
-    // Find the last user message
     const messages = activeChat.messages;
     const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user');
     if (!lastUserMsg) return;
 
-    // Re-send the prompt
     handleSend(lastUserMsg.content);
   };
 
@@ -258,6 +273,14 @@ export default function App() {
           >
             <X className="w-3.5 h-3.5" />
           </button>
+        </div>
+      )}
+
+      {/* Web Search Indicator */}
+      {isSearching && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 px-4 py-2 rounded-full bg-input border border-border-subtle shadow-lg text-xs text-text-muted">
+          <Globe className="w-3.5 h-3.5 animate-pulse text-sky-400" />
+          <span>Searching the web...</span>
         </div>
       )}
 
@@ -314,4 +337,3 @@ export default function App() {
     </div>
   );
 }
-

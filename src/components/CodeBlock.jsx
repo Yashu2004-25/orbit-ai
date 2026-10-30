@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Check, Copy } from 'lucide-react';
+import hljs from 'highlight.js';
 
 export default function CodeBlock({ language, code }) {
   const [copied, setCopied] = useState(false);
@@ -15,6 +16,23 @@ export default function CodeBlock({ language, code }) {
   };
 
   const displayLanguage = language || 'code';
+
+  // Use highlight.js directly for syntax highlighting
+  const highlightedHtml = useMemo(() => {
+    if (!code) return '';
+    try {
+      if (language && hljs.getLanguage(language)) {
+        return hljs.highlight(code, { language }).value;
+      }
+      return hljs.highlightAuto(code).value;
+    } catch {
+      // Fallback to plain text if highlighting fails
+      return code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+  }, [code, language]);
 
   return (
     <div className="relative my-4 rounded-xl overflow-hidden border border-border-subtle bg-[#1e1e1e] text-[#abb2bf] text-sm font-mono shadow-sm">
@@ -42,11 +60,13 @@ export default function CodeBlock({ language, code }) {
         </button>
       </div>
 
-      {/* Code content */}
-      <div className="p-4 overflow-x-auto text-[13px] leading-relaxed">
-        <code>{code}</code>
-      </div>
+      {/* Code content with syntax highlighting */}
+      <pre className="p-4 overflow-x-auto text-[13px] leading-relaxed m-0">
+        <code
+          className={`hljs language-${language || ''}`}
+          dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+        />
+      </pre>
     </div>
   );
 }
-

@@ -1,8 +1,22 @@
 import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 import CodeBlock from './CodeBlock.jsx';
+
+/**
+ * Recursively extract plain text from React children.
+ * This prevents [object Object] from appearing in code blocks.
+ */
+function extractText(children) {
+  if (children == null) return '';
+  if (typeof children === 'string') return children;
+  if (typeof children === 'number') return String(children);
+  if (Array.isArray(children)) return children.map(extractText).join('');
+  if (typeof children === 'object' && children.props) {
+    return extractText(children.props.children);
+  }
+  return '';
+}
 
 export default function MarkdownView({ content }) {
   // Gracefully complete unclosed code blocks if currently streaming
@@ -20,9 +34,9 @@ export default function MarkdownView({ content }) {
     // Custom Code & Code block renderer
     code({ node, inline, className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || '');
-      const codeString = String(children).replace(/\n$/, '');
+      const codeString = extractText(children).replace(/\n$/, '');
 
-      if (!inline && (match || String(children).includes('\n'))) {
+      if (!inline && (match || codeString.includes('\n'))) {
         return (
           <CodeBlock
             language={match ? match[1] : ''}
@@ -40,6 +54,11 @@ export default function MarkdownView({ content }) {
           {children}
         </code>
       );
+    },
+
+    // Ensure <pre> blocks don't double-wrap
+    pre({ children }) {
+      return <>{children}</>;
     },
 
     // Links open in new tab securely
@@ -119,7 +138,6 @@ export default function MarkdownView({ content }) {
     <div className="prose dark:prose-invert max-w-none text-text-main text-[15px] leading-relaxed break-words">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight]}
         components={components}
       >
         {processedContent}
@@ -127,4 +145,3 @@ export default function MarkdownView({ content }) {
     </div>
   );
 }
-

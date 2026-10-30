@@ -147,6 +147,7 @@ export async function fetchAvailableModels(apiKey) {
 
 /**
  * Stream a chat completion from Groq API
+ * @param {string} searchContext - Optional web search results to inject into system prompt
  */
 export async function streamChatCompletion({
   apiKey,
@@ -154,16 +155,24 @@ export async function streamChatCompletion({
   messages,
   signal,
   onChunk,
+  searchContext,
 }) {
   const key = apiKey || getActiveApiKey();
   if (!key) {
     throw new Error('NO_API_KEY');
   }
 
+  // Build system prompt, injecting search context if available
+  let systemContent = 'You are Orbit, a friendly and helpful AI assistant. Format answers clearly using Markdown.';
+
+  if (searchContext) {
+    systemContent += `\n\nYou have access to the following real-time web search results to help answer the user's question. Use this information to provide accurate, up-to-date answers. Cite sources when relevant.\n\n--- WEB SEARCH RESULTS ---\n${searchContext}\n--- END SEARCH RESULTS ---`;
+  }
+
   const formattedMessages = [
     {
       role: 'system',
-      content: 'You are Orbit, a friendly and helpful AI assistant. Format answers clearly using Markdown.',
+      content: systemContent,
     },
     ...messages.map((m) => ({
       role: m.role,
@@ -257,4 +266,3 @@ export async function streamChatCompletion({
     throw err;
   }
 }
-

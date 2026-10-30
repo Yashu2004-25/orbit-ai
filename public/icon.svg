@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Electric Blue Neon Gradient -->
+    <linearGradient id="blue-ring" x1="15%" y1="20%" x2="85%" y2="80%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="35%" stop-color="#00d2ff"/>
+      <stop offset="70%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+
+    <!-- Secondary highlight gradient for the front swoop -->
+    <linearGradient id="front-glow" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="60%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+
+    <!-- Soft ambient cosmic background haze -->
+    <radialGradient id="bg-aura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.35"/>
+      <stop offset="65%" stop-color="#0369a1" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Squircle container background -->
+    <radialGradient id="bg-container" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </radialGradient>
+
+    <!-- Neon Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Dark Rounded App Icon Base -->
+  <rect width="512" height="512" rx="128" fill="url(#bg-container)"/>
+
+  <!-- Background Aura -->
+  <circle cx="256" cy="250" r="195" fill="url(#bg-aura)"/>
+
+  <!-- Back Upper Arc of Outer Ring -->
+  <path d="M 112 280 C 102 153, 348 92, 430 190" stroke="url(#blue-ring)" stroke-width="34" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Deep Black Core Sphere -->
+  <circle cx="256" cy="245" r="118" fill="#000000" stroke="#0f172a" stroke-width="6"/>
+
+  <!-- Inner Ring Track -->
+  <path d="M 328 169 C 379 184, 410 220, 390 251 C 364 282, 277 297, 225 292" stroke="url(#blue-ring)" stroke-width="16" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- White Orbiting Particle -->
+  <circle cx="379" cy="195" r="15" fill="#ffffff"/>
+
+  <!-- Front Lower Arc of Outer Ring -->
+  <path d="M 102 297 C 113 364, 246 390, 384 297 C 430 266, 451 225, 436 190" stroke="url(#front-glow)" stroke-width="36" stroke-linecap="round" filter="url(#glow)"/>
+
+  <!-- Connecting Tip -->
+  <path d="M 107 276 C 102 286, 105 295, 112 302" stroke="url(#front-glow)" stroke-width="30" stroke-linecap="round"/>
+</svg>

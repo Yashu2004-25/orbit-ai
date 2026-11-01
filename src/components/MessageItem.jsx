@@ -26,6 +26,9 @@ export default function MessageItem({
     return (
       <div className="flex justify-end my-4 px-2">
         <div className="max-w-[85%] sm:max-w-[75%] rounded-3xl px-5 py-3 bg-input text-text-main shadow-xs border border-border-subtle/50 text-[15px] leading-relaxed whitespace-pre-wrap break-words">
+          {message.attachments?.length > 0 && <div className="flex flex-wrap gap-2 mb-2">
+            {message.attachments.map((file, index) => file.type === 'image' ? (file.unavailable ? <div key={`${file.name}-${index}`} className="flex items-center gap-2 rounded-lg border border-border-subtle px-2 py-1 text-xs">🖼️ {file.name} (image not retained)</div> : <img key={`${file.name}-${index}`} src={file.preview || `data:${file.mimeType};base64,${file.data}`} alt={file.name} className="max-w-48 max-h-48 rounded-xl object-contain border border-border-subtle" />) : <div key={`${file.name}-${index}`} className="flex items-center gap-2 rounded-lg border border-border-subtle px-2 py-1 text-xs"><span>📄</span><span className="max-w-40 truncate">{file.name}</span></div>)}
+          </div>}
           {message.content}
         </div>
       </div>

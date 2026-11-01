@@ -108,7 +108,7 @@ export default function ChatWindow({
       <ChatInput
         input={input}
         setInput={setInput}
-        onSend={() => onSend(input)}
+        onSend={(text, attachments) => onSend(text, attachments)}
         onStop={onStop}
         isStreaming={isStreaming}
       />

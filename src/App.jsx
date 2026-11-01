@@ -139,9 +139,9 @@ export default function App() {
   };
 
   // Send message
-  const handleSend = async (messageText) => {
-    const textToSend = (messageText || input).trim();
-    if (!textToSend || isStreaming) return;
+  const handleSend = async (messageText, attachments = []) => {
+    const textToSend = (messageText ?? input).trim();
+    if ((!textToSend && !attachments.length) || isStreaming) return;
 
     const apiKey = getActiveApiKey();
     if (!apiKey) {
@@ -159,7 +159,8 @@ export default function App() {
     }
 
     // 1. Append user message
-    addMessage(chatId, 'user', textToSend);
+    const userMessage = { role: 'user', content: textToSend, attachments };
+    addMessage(chatId, 'user', textToSend, attachments);
 
     // 2. Append placeholder assistant message
     const assistantMessageId = addMessage(chatId, 'assistant', '');
@@ -186,7 +187,7 @@ export default function App() {
     const existingMessages = activeChat?.messages || [];
     const conversationHistory = [
       ...existingMessages,
-      { role: 'user', content: textToSend },
+      userMessage,
     ];
 
     try {
@@ -196,6 +197,7 @@ export default function App() {
         messages: conversationHistory,
         signal: abortControllerRef.current.signal,
         searchContext,
+        onModelFallback: (modelId) => showToast(`Images require a vision model; using ${modelId}.`, 'info'),
         onChunk: (chunk) => {
           appendMessageContent(chatId, assistantMessageId, chunk);
         },
@@ -225,6 +227,8 @@ export default function App() {
           assistantMessageId,
           '⚠️ Groq API rate limit reached. Please wait a short moment and try again.'
         );
+      } else if (err.message?.startsWith('VISION_MODEL_ERROR:')) {
+        updateMessageContent(chatId, assistantMessageId, `⚠️ The Groq vision request failed: ${err.message.slice('VISION_MODEL_ERROR:'.length)}`);
       } else {
         updateMessageContent(
           chatId,
@@ -247,7 +251,7 @@ export default function App() {
     const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user');
     if (!lastUserMsg) return;
 
-    handleSend(lastUserMsg.content);
+    handleSend(lastUserMsg.content, lastUserMsg.attachments || []);
   };
 
   return (

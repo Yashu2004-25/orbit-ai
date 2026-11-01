@@ -66,6 +66,20 @@ export function useChats() {
       localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(chats));
     } catch (e) {
       console.error('Error saving chats to storage', e);
+      try {
+        const compactChats = chats.map((chat) => ({
+          ...chat,
+          messages: chat.messages.map((message) => ({
+            ...message,
+            attachments: (message.attachments || []).map((attachment) => attachment.type === 'image'
+              ? { name: attachment.name, type: 'image', mimeType: attachment.mimeType, unavailable: true }
+              : attachment),
+          })),
+        }));
+        localStorage.setItem(CHATS_STORAGE_KEY, JSON.stringify(compactChats));
+      } catch (compactError) {
+        console.error('Chat history exceeds local storage capacity', compactError);
+      }
     }
   }, [chats]);
 
@@ -143,11 +157,12 @@ export function useChats() {
   /**
    * Add a message to a chat (and auto-title if it's the first user message)
    */
-  const addMessage = useCallback((chatId, role, content) => {
+  const addMessage = useCallback((chatId, role, content, attachments = []) => {
     const newMessage = {
       id: generateId(),
       role,
       content,
+      attachments,
       createdAt: Date.now(),
     };
 

@@ -1,132 +1,84 @@
-<p align="center">
-  <img src="docs/hero.svg" alt="Orbit AI Banner" width="100%" />
-</p>
+# Orbit
 
-<p align="center">
-  <strong>A fast, clean AI chat app for Windows and Android, powered by Groq.</strong>
-</p>
+Orbit is a React/Vite chat client for Groq, packaged for Windows with Electron and Android with Capacitor. It supports local extraction of text from TXT, Markdown, CSV, PDF, and DOCX files, plus image questions over PNG and JPEG files using Groq vision models.
 
-<p align="center">
-  <a href="https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit-Setup.exe">
-    <img src="https://img.shields.io/badge/Download%20for-Windows%20(.exe)-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows" />
-  </a>
-  <a href="https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit.apk">
-    <img src="https://img.shields.io/badge/Download%20for-Android%20(.apk)-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Download Android" />
-  </a>
-</p>
+## File attachments
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" alt="Version" />
-  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Android%20%7C%20Web-lightgrey?style=flat-square" alt="Platforms" />
-  <img src="https://img.shields.io/badge/AI%20Engine-Groq%20LPU-orange?style=flat-square" alt="Groq" />
-  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" />
-</p>
+Use the paperclip button or drop files onto the chat input. Supported types are `.txt`, `.md`, `.csv`, `.pdf`, `.docx`, `.png`, `.jpg`, and `.jpeg`; each file is limited to 20 MB. PDF and Word parsing runs in the app on the device. Document text is included in the chat request (up to 100,000 characters per file). Images are sent as data URLs to a vision-capable Groq model. When an image is attached while a text-only model is selected, Orbit automatically requests `qwen/qwen3.8-27b`. Groq currently supports up to three images in one request.
 
----
+Files and extracted text are stored with local chat history in browser storage. Avoid attaching sensitive documents on shared devices. Scanned PDFs without an embedded text layer need OCR and currently produce an empty-text warning.
 
-## 📥 Direct Downloads
+## Local development and parsing checks
 
-| Platform | File | Direct Link |
-| :--- | :--- | :--- |
-| **Windows Desktop** | `Orbit-Setup.exe` | [**Download Installer (.exe)**](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit-Setup.exe) |
-| **Android Mobile** | `Orbit.apk` | [**Download APK (.apk)**](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit.apk) |
-
-> 📌 *All versions, changelogs, and releases: see the [GitHub Releases](https://github.com/Yashu2004-25/orbit-ai/releases) page.*
-
----
-
-## 🚀 Installation Guide
-
-### Windows Installation
-1. Download **[`Orbit-Setup.exe`](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit-Setup.exe)** from the link above.
-2. Double-click the installer to launch the setup.
-3. *Note on Windows SmartScreen:* Because open-source community applications do not carry thousand-dollar commercial code-signing certificates, Windows SmartScreen may show an alert saying *"Windows protected your PC"*.
-   - Click **More info**
-   - Click **Run anyway**
-4. Orbit installs in seconds and places a desktop shortcut for quick access.
-
-### Android Installation
-1. Download **[`Orbit.apk`](https://github.com/Yashu2004-25/orbit-ai/releases/latest/download/Orbit.apk)** directly onto your phone.
-2. Tap the downloaded `.apk` in your notifications or File Manager.
-3. If prompted by Android security, toggle **Allow from this source** under *Install unknown apps*.
-4. Tap **Install** and open Orbit.
-
----
-
-## 🔑 First-Time Setup (3 Simple Steps)
-
-1. **Get your free Groq API key**:
-   Head to [console.groq.com/keys](https://console.groq.com/keys) and generate your free API key in seconds.
-2. **Open Orbit**:
-   On your first launch, the Settings window will automatically appear with a welcome prompt.
-3. **Save and Start Chatting**:
-   Paste your key (`gsk_...`), click **Test key** to confirm connectivity, click **Save**, and start enjoying instantaneous AI responses!
-
----
-
-## ✨ Features
-
-- **ChatGPT-Inspired Aesthetics**: Clean, calm, modern interface with spacious layouts, smooth 180ms transitions, and zero visual clutter.
-- **Dark & Light Mode**: Seamlessly follows your operating system theme by default, with instant manual toggles in Settings.
-- **Live Response Streaming**: Fast token streaming directly from Groq's LPUs with a gentle three-dot "thinking" animation and an instant **Stop** button.
-- **Flawless Markdown & Code Highlighting**: Never reveals raw markdown symbols. Full support for tables, lists, quotes, and dark code blocks with syntax highlighting and a 1-click **Copy code** button.
-- **Smart Model Selector (Only Active Models)**: Dynamically fetches chat models from Groq while filtering out decommissioned/retired models. Comes with safe fallbacks:
-  - `openai/gpt-oss-120b` *(Smartest)*
-  - `openai/gpt-oss-20b` *(Fastest)*
-- **Persistent Chat History**: Stores all your chats locally on your device with auto-titling from your first prompt, inline renaming, and safe deletion.
-- **Smart Scrolling**: Automatically scrolls during streaming, but detects when you scroll up manually and displays a floating "scroll to bottom" button.
-
----
-
-## 🔒 Privacy & Security
-
-- **Local Storage Only**: Your API key and conversation history are stored **only on your device** in `localStorage`.
-- **Zero Intermediary Servers**: All requests go straight from your device to the official Groq API (`api.groq.com`).
-- **No Telemetry**: No trackers, no telemetry, and no data mining.
-
----
-
-## 🛠️ For Developers
-
-### Tech Stack
-- **Framework**: React 19 + Vite
-- **Styling**: Tailwind CSS v4 + Tailwind Typography
-- **Desktop Runtime**: Electron 34 + electron-builder
-- **Mobile Runtime**: Capacitor 7 (Android)
-- **AI Backend**: Plain `fetch` streaming to Groq API
-
-### Local Development Setup
-
-```bash
-# 1. Clone repository
-git clone https://github.com/Yashu2004-25/orbit-ai.git
-cd orbit-ai
-
-# 2. Install dependencies
+```powershell
 npm install
-
-# 3. Start local web server
 npm run dev
 ```
 
-### Desktop & Mobile Builds
+Open the local Vite URL, set a Groq key in Settings, then attach one file of each supported type. Ask a question that requires its contents. Confirm that text and DOCX/PDF answers use extracted text, and that an image question invokes a vision model. You can test parsing without a key by selecting files and checking the attachment chips; sending requires a key. PDFs are text extraction only (no OCR).
 
-```bash
-# Run desktop app locally
-npm run electron
+## Groq API key
 
-# Build Windows installer (release/Orbit-Setup.exe)
-npm run dist:win
+The recommended setup is for each user to paste their own Groq API key into **Settings**. Orbit stores it in local storage on that device. Never commit a real key. `.env` files are ignored by Git, but `VITE_*` variables are embedded into browser assets at build time and are not secret; do not put a shared production key in `VITE_GROQ_API_KEY`. A production service should proxy Groq requests through a backend if you need centrally managed credentials.
 
-# Build Android production APK
-npm run build
-npx cap sync
-npx cap open android
-# Inside Android Studio: Build > Build Bundle(s) / APK(s) > Build APK(s)
+For local-only Vite use, you may create `.env.local`:
+
+```dotenv
+VITE_GROQ_API_KEY=gsk_your_local_development_key
 ```
 
----
+Remove this key before sharing built assets. Do not ship builds with a developer key.
 
-## 📄 License
+## Build the Windows executable
 
-Distributed under the **MIT License**. Free for personal and commercial use.
+On Windows with Node.js installed:
+
+```powershell
+npm install
+npm run dist:win
+```
+
+The installer is written to `release/Orbit-Setup.exe`. The `release/` output is ignored by Git by default.
+
+## Build the Android APK
+
+Install Android Studio and its Android SDK, then configure `ANDROID_HOME` and ensure the SDK platform tools are on `PATH`. From PowerShell:
+
+```powershell
+npm install
+npm run android:sync
+cd android
+.\gradlew.bat assembleDebug
+```
+
+The debug APK is `android/app/build/outputs/apk/debug/app-debug.apk`. For a release APK, configure signing in Gradle/Android Studio and build the signed release variant; do not commit keystores or passwords. You can also open the generated Android project with `npx cap open android` and use Android Studio's Build APK action.
+
+## Git commit and push
+
+Before pushing, inspect the files and make sure no `.env`, API key, signing key, or unwanted build artifact is staged. Set `origin` to your repository if needed. The repo ignores generated executables/APKs by default, so force-add only the specific binaries when you intend to publish them directly in Git; GitHub recommends Releases for large binaries.
+
+```powershell
+# Optional: configure the remote once
+git remote add origin https://github.com/OWNER/REPOSITORY.git
+
+# Build first, then stage source and (if desired) the generated binaries
+npm run dist:win
+npm run android:apk
+git add .
+git add -f release/Orbit-Setup.exe android/app/build/outputs/apk/debug/app-debug.apk
+git status --short
+git diff --cached --check
+git commit -m "feat: add multimodal file support for text, images, pdf, and docx"
+git push -u origin HEAD
+```
+
+If binaries exceed the repository's file-size limits, publish them as GitHub Release assets or use Git LFS instead of adding them to normal Git history.
+
+## Project structure
+
+- `src/` — React app, chat UI, Groq service, and file parsers
+- `public/` — static app icons
+- `docs/` — project artwork
+- `electron/` — Windows desktop wrapper
+- `android/` — Capacitor Android project
+- `release/` — generated Windows package output

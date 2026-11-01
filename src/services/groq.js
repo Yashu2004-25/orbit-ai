@@ -10,6 +10,14 @@ export const SAFE_DEFAULT_MODELS = [
 ];
 
 export const DEFAULT_MODEL_ID = 'openai/gpt-oss-120b';
+export const DEFAULT_VISION_MODEL_ID = 'qwen/qwen3.8-27b';
+
+const VISION_MODEL_HINTS = ['vision', 'llama-4', 'qwen3.8-27b', 'qwen3.6-27b', 'qwen3-vl', 'qwen-vl'];
+
+function modelSupportsImages(modelId) {
+  const id = (modelId || '').toLowerCase();
+  return VISION_MODEL_HINTS.some((hint) => id.includes(hint));
+}
 
 // Known friendly names mapping
 const FRIENDLY_NAMES = {
@@ -109,15 +117,23 @@ export async function fetchAvailableModels(apiKey) {
       'compound',
       'llama-3.1-8b-instant',
       'llama-3.3-70b-versatile',
-      'llama-4',
       'qwen3-32b',
       'kimi-k2',
     ];
 
     const filtered = data.data.filter((item) => {
       const id = item.id.toLowerCase();
-      return !excludedKeywords.some((keyword) => id.includes(keyword));
+      return id === DEFAULT_VISION_MODEL_ID || !excludedKeywords.some((keyword) => id.includes(keyword));
     });
+
+    // Include the documented vision model even when the model listing omits it.
+    if (!filtered.some((item) => item.id === DEFAULT_VISION_MODEL_ID)) {
+      filtered.push({ id: DEFAULT_VISION_MODEL_ID });
+    }
+
+    if (!filtered.some((item) => item.id === DEFAULT_MODEL_ID)) {
+      filtered.push({ id: DEFAULT_MODEL_ID });
+    }
 
     if (filtered.length === 0) {
       return SAFE_DEFAULT_MODELS;
@@ -156,6 +172,7 @@ export async function streamChatCompletion({
   signal,
   onChunk,
   searchContext,
+  onModelFallback,
 }) {
   const key = apiKey || getActiveApiKey();
   if (!key) {
@@ -169,6 +186,16 @@ export async function streamChatCompletion({
     systemContent += `\n\nYou have access to the following real-time web search results to help answer the user's question. Use this information to provide accurate, up-to-date answers. Cite sources when relevant.\n\n--- WEB SEARCH RESULTS ---\n${searchContext}\n--- END SEARCH RESULTS ---`;
   }
 
+  const hasImages = messages.some((m) => m.attachments?.some((attachment) => attachment.type === 'image'));
+  const imageCount = messages.reduce((count, message) => count + (message.attachments || []).filter((attachment) => attachment.type === 'image').length, 0);
+  if (messages.some((message) => message.attachments?.some((attachment) => attachment.type === 'image' && attachment.unavailable))) {
+    throw new Error('An image in this chat was not retained due to local storage limits. Please attach it again.');
+  }
+  if (imageCount > 3) throw new Error('Groq vision supports up to 3 images per request. Start a new chat or remove older image attachments.');
+  const requestedModel = model || DEFAULT_MODEL_ID;
+  const requestModel = hasImages && !modelSupportsImages(requestedModel) ? DEFAULT_VISION_MODEL_ID : requestedModel;
+  if (requestModel !== requestedModel) onModelFallback?.(requestModel);
+
   const formattedMessages = [
     {
       role: 'system',
@@ -176,7 +203,7 @@ export async function streamChatCompletion({
     },
     ...messages.map((m) => ({
       role: m.role,
-      content: m.content,
+      content: formatMessageContent(m),
     })),
   ];
 
@@ -189,7 +216,7 @@ export async function streamChatCompletion({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: model || DEFAULT_MODEL_ID,
+        model: requestModel,
         messages: formattedMessages,
         stream: true,
         reasoning_effort: 'low',
@@ -221,6 +248,9 @@ export async function streamChatCompletion({
       throw new Error('MODEL_DECOMMISSIONED');
     }
 
+    if (hasImages && requestModel === DEFAULT_VISION_MODEL_ID && response.status === 400) {
+      throw new Error(`VISION_MODEL_ERROR:${errorMsg || 'The selected Groq vision model rejected this image request.'}`);
+    }
     throw new Error(errorMsg || `API_ERROR_${response.status}`);
   }
 
@@ -265,4 +295,19 @@ export async function streamChatCompletion({
     }
     throw err;
   }
+}
+
+function formatMessageContent(message) {
+  const attachments = message.attachments || [];
+  const textFiles = attachments.filter((attachment) => attachment.type === 'text');
+  const images = attachments.filter((attachment) => attachment.type === 'image');
+  const textContent = [message.content || '', ...textFiles.map((file) => {
+    const truncationNote = file.truncated ? '\n[Document truncated to fit the prompt size limit.]' : '';
+    return `\n\n--- Attached document: ${file.name} ---\n${file.text}${truncationNote}\n--- End document ---`;
+  })].filter(Boolean).join('\n\n');
+  if (!images.length) return textContent;
+  return [
+    { type: 'text', text: textContent || 'Please inspect the attached image(s) and answer my question.' },
+    ...images.map((image) => ({ type: 'image_url', image_url: { url: `data:${image.mimeType};base64,${image.data}` } })),
+  ];
 }

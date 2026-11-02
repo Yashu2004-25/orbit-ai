@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { ArrowUp, Square, Paperclip, X, FileText, Image as ImageIcon } from 'lucide-react';
+import { ArrowUp, Square, Paperclip, X, FileText } from 'lucide-react';
 import { ACCEPTED_FILES, parseChatFile } from '../services/files.js';
 
 export default function ChatInput({ input, setInput, onSend, onStop, isStreaming, disabled }) {
@@ -53,7 +53,7 @@ export default function ChatInput({ input, setInput, onSend, onStop, isStreaming
             <button type="button" onClick={() => setAttachments((current) => current.filter((_, i) => i !== index))} aria-label={`Remove ${file.name}`} className="p-1 text-text-muted hover:text-text-main"><X className="w-3.5 h-3.5" /></button>
           </div>)}
         </div>}
-        <textarea ref={textareaRef} rows={1} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={handleKeyDown} placeholder="Message Orbit" className="w-full resize-none bg-transparent pt-3.5 pb-3.5 pl-5 pr-14 text-[15px] leading-relaxed text-text-main placeholder:text-text-muted focus:outline-hidden max-h-[200px] overflow-y-auto" />
+        <textarea ref={textareaRef} rows={1} value={input} onChange={(event) => setInput(event.target.value)} onKeyDown={handleKeyDown} placeholder="Message Orbit" className="w-full resize-none bg-transparent pt-3.5 pb-3.5 pl-14 pr-14 text-[15px] leading-relaxed text-text-main placeholder:text-text-muted focus:outline-hidden max-h-[200px] overflow-y-auto" />
         <div className="absolute left-2.5 bottom-2.5 flex items-center gap-1">
           <button type="button" onClick={() => fileInputRef.current?.click()} disabled={disabled || isStreaming} aria-label="Attach files" title="Attach TXT, MD, CSV, PDF, DOCX, PNG, or JPG" className="w-8 h-8 rounded-full flex items-center justify-center text-text-muted hover:text-text-main hover:bg-hover disabled:opacity-40"><Paperclip className="w-4 h-4" /></button>
           <input ref={fileInputRef} type="file" multiple accept={ACCEPTED_FILES} className="hidden" onChange={(event) => { addFiles(event.target.files); event.target.value = ''; }} />
